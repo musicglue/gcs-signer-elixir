@@ -11,7 +11,7 @@ defmodule GcsSigner.Client do
   ## Examples
 
       iex> service_account = service_account_json_str |> Poison.decode!
-      iex> GcsSigner.Client.init(service_account)
+      iex> GcsSigner.Client.init(service_account_map)
       %GcsSigner.Client{...}
 
 
