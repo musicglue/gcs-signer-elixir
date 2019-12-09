@@ -6,7 +6,7 @@ defmodule GcsSigner.Client do
   defstruct private_key: nil, client_email: nil
 
   @doc """
-  Initialize GcsSigner.Clien
+  Initialize GcsSigner.Client
 
   ## Examples
 
@@ -20,7 +20,16 @@ defmodule GcsSigner.Client do
       %GcsSigner.Client{...}
 
   """
-  def init(), do: look_for_environment_variables() |> Poison.decode!() |> from_keyfile()
+  def init() do
+    case look_for_environment_variables() do
+      nil ->
+        raise "You to configure GcsSigner - either using GOOGLE_CLOUD_KEYFILE / GOOGLE_CLOUD_KEYFILE_JSON or by using app env"
+
+      data ->
+        data |> Poison.decode!() |> from_keyfile()
+    end
+  end
+
   def init(keyfile_map) when is_map(keyfile_map), do: from_keyfile(keyfile_map)
 
   defp from_keyfile(%{
